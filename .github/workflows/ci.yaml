@@ -1,0 +1,35 @@
+name: Bazel Esp8266 CI
+
+run-name: CI build triggered by ${{ github.actor }}
+
+on:
+  push:
+    branches:
+      - "**"
+    tags:
+      - "**"
+  # Run tests for any PRs.
+  pull_request:
+
+jobs:
+    verify-build-and-test:
+      runs-on: ubuntu-latest
+      defaults:
+        run:
+          shell: bash
+      container: ubuntu
+      steps:
+        - name: "Check out repository code"
+          uses: actions/checkout@v3
+        - name: "Install ca-certificates"  # needed recent certificates for downloading artifacts
+          run: apt update && apt install -y ca-certificates
+        - name: "Get bazelisk"
+          uses: bazel-contrib/setup-bazel@0.8.5
+          with:
+            bazelisk-version: 1.20.0
+        - name: "Test formatting"
+          run: bazel run buildifier.check
+        - name: "Build all xtensa targets"
+          run: bazel test //... || [[ $? == 4 ]]  # bazel exits with 4 if everything builds but there are no test targets. This is fine.
+        - name: "Build all regular targets"
+          run: bazel test --config=host //... || [[ $? == 4 ]]

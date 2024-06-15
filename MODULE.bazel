@@ -1,0 +1,54 @@
+"""Bazel dependencies of this repo"""
+
+module(
+    name = "bazel_esp8266",
+    version = "1.0",
+)
+
+bazel_dep(name = "platforms", version = "0.0.10")
+bazel_dep(name = "rules_python", version = "0.25.0")
+bazel_dep(name = "buildifier_prebuilt", version = "6.4.0")
+bazel_dep(name = "bazel_skylib", version = "1.7.1")
+
+http_archive = use_repo_rule("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
+
+# The cross compiler, tools and headers.
+http_archive(
+    name = "xtensa_lx106_elf_linux64",
+    build_file = "@bazel_esp8266//bazel/external:xtensa_lx106_elf_linux64/BUILD.bzl",
+    sha256 = "89d21f38a516e34e0bb44df7e30ef6b1bc2f7f125aae3b7986e5cae545a3ed83",
+    strip_prefix = "xtensa-lx106-elf",
+    urls = ["https://github.com/earlephilhower/esp-quick-toolchain/releases/download/3.1.0-gcc10.3/x86_64-linux-gnu.xtensa-lx106-elf-e5f9fec.220621.tar.gz"],
+)
+
+http_archive(
+    name = "arduino_esp8266",
+    build_file = "@bazel_esp8266//bazel/external:arduino_esp8266/BUILD.bzl",
+    sha256 = "b3f47686d7783c120c2f10bf82788f921c53db8642cc87012599abb6e335b182",
+    strip_prefix = "esp8266-3.1.2",
+    urls = ["https://github.com/esp8266/Arduino/releases/download/3.1.2/esp8266-3.1.2.zip"],
+)
+
+http_archive(
+    name = "mklittlefs",
+    build_file = "@bazel_esp8266//bazel/external:mklittlefs/BUILD.bzl",
+    sha256 = "e4a0948bf5c06cb8fdc216bb81ae89e65bd3d49a6007ddcd4fe4b51fe05abb75",
+    strip_prefix = "mklittlefs",
+    urls = ["https://github.com/earlephilhower/mklittlefs/releases/download/3.2.0/x86_64-linux-gnu-mklittlefs-975bd0f.tar.gz"],
+)
+
+http_archive(
+    name = "python3",
+    build_file = "@bazel_esp8266//bazel/external:python3/BUILD.bzl",
+    sha256 = "a73ba777b5d55ca89edef709e6b8521e3f3d4289581f174c8699adfb608d09d6",
+    strip_prefix = "python",
+    urls = ["https://github.com/indygreg/python-build-standalone/releases/download/20240415/cpython-3.12.3+20240415-x86_64-unknown-linux-gnu-install_only.tar.gz"],
+)
+
+http_archive(
+    name = "pyserial",
+    build_file = "@bazel_esp8266//bazel/external/pip:pyserial/BUILD.bzl",
+    sha256 = "0a85cb567b2322ae4859a6996695d733fd3369f95d869bab4cc04e3e78606ca8",
+    strip_prefix = "pyserial-3.4",
+    urls = ["https://github.com/pyserial/pyserial/archive/refs/tags/v3.4.zip"],
+)

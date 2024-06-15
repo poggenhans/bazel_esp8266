@@ -1,0 +1,18 @@
+# Register the toolchain for nodemcuv2
+build --extra_toolchains=@xtensa_lx106_elf_linux64//:cc-xtensa-toolchain-nodemcuv2
+
+# enable nonstandard gcc flags for it
+build --//:nonstandard_flags
+
+# --config=esp8266 selects the platform
+build:esp8266 --platforms=:nodemcuv2_platform
+
+build --config=esp8266
+
+# register python toolchain (needed for testing)
+build --extra_toolchains=@python3//:toolchain
+
+build:host --platforms=@local_config_platform//:host
+
+test --test_output=errors
+build --spawn_strategy=sandboxed

@@ -1,0 +1,3 @@
+/bazel-*
+/external
+/bazel_esp8266/bazel-*

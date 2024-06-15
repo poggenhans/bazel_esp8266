@@ -17,9 +17,6 @@ check_hash_and_run() {
     local known_hash=""
     local sha_file=$(basename "$file_name").sha256
 
-    if [ -f "$sha_file" ]; then
-        echo known_hash=$(cat "$sha_file")
-    fi
     if [ "$file_hash" == "$known_hash" ]; then
         echo $file_name is unchanged
     else
@@ -41,5 +38,5 @@ if [[ "$DATA" != "" ]]; then
     check_hash_and_run "$DATA" "$cmd"
 fi
 cmd=""$UPLOAD_TOOL" --chip $CHIP --baud $BAUD $@ --before $BEFORE --after $AFTER write_flash 0x0 "$CODE""
-# check_hash_and_run "$CODE" "$cmd"
+check_hash_and_run "$CODE" "$cmd"
 echo Done

@@ -22,7 +22,8 @@ py_runtime(
     files = [":files"],
     interpreter = ":interpreter",
     python_version = "PY3",
-    stub_shebang = "#!/usr/bin/env -S /bin/bash -c '$0.runfiles/_main~_repo_rules~python3/bin/python3 $0 \"$@\"'",  # see https://github.com/bazelbuild/rules_python/issues/691
+    # see https://github.com/bazelbuild/rules_python/issues/691
+    stub_shebang = r"""#!/usr/bin/env -S /bin/bash -c 'if [[ $(pwd) =~ (.*\\.runfiles[/$]) ]]; then ${BASH_REMATCH[0]}/_main~_repo_rules~python3/bin/python3 $0 "$@"; else $0.runfiles/_main~_repo_rules~python3/bin/python3 $0 "$@"; fi'""",
     visibility = ["//visibility:public"],
 )
 py_runtime_pair(
